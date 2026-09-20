@@ -29,8 +29,8 @@ I built **EnvLens**: a lightweight, single-file web utility designed to run 100%
 - **Template Linter**: Compares your active config against your `.env.example` to highlight missing variables or undeclared extra keys.
 - **Zero-Dependency Single-File Bundle**: Can be run from a single 32 KB self-contained HTML file (offline / air-gapped).
 
-Source and standalone bundle: https://github.com/<username>/envlens
-Live demo: https://<username>.github.io/envlens/
+Source and standalone bundle: https://github.com/ranajagvinder/envlens
+Live demo: https://ranajagvinder.github.io/envlens/
 
 Feedback, regex edge cases, and feature suggestions are very welcome!
 ```
@@ -60,8 +60,8 @@ So I created **EnvLens** — a fast, private developer utility:
 
 It's free, open source, and deployable to GitHub Pages or Cloudflare Pages with zero build step.
 
-- Repo & Single-File Download: https://github.com/<username>/envlens
-- Live Web Tool: https://<username>.github.io/envlens/
+- Repo & Single-File Download: https://github.com/ranajagvinder/envlens
+- Live Web Tool: https://ranajagvinder.github.io/envlens/
 
 Would love to know what formats or secret patterns you'd like added!
 ```
@@ -99,8 +99,8 @@ Environment variables are the bedrock of the 12-factor app pattern, but in day-t
 5. **Portable Single-File Bundle**: Packaged into a single ~32 KB HTML file that can be kept on an air-gapped machine or developer desktop.
 
 Check out the code, run it locally, or deploy it to your own static hosting in seconds:
-- **GitHub**: https://github.com/<username>/envlens
-- **Live Version**: https://<username>.github.io/envlens/
+- **GitHub**: https://github.com/ranajagvinder/envlens
+- **Live Version**: https://ranajagvinder.github.io/envlens/
 ```
 
 ---
@@ -115,6 +115,6 @@ Check out the code, run it locally, or deploy it to your own static hosting in s
 🔍 Catch missing keys vs .env.example
 📴 Zero CDNs, zero telemetry, runs in 1 standalone HTML file
 
-Try it live: https://<username>.github.io/envlens/
-Open Source: https://github.com/<username>/envlens
+Try it live: https://ranajagvinder.github.io/envlens/
+Open Source: https://github.com/ranajagvinder/envlens
 ```

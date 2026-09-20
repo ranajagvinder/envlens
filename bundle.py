@@ -1,6 +1,9 @@
 import os
+import shutil
 
-base_dir = r"C:\Users\Rana\.gemini\antigravity-ide\scratch\envlens"
+# Resolve base_dir dynamically relative to script location
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
 with open(os.path.join(base_dir, "index.source.html"), "r", encoding="utf-8") as f:
     html = f.read()
 
@@ -16,8 +19,14 @@ html_bundled = html.replace('<link rel="stylesheet" href="style.css">', f"<style
 # Inline JS
 html_bundled = html_bundled.replace('<script src="app.js"></script>', f"<script>\n{js}\n</script>")
 
-out_path = os.path.join(base_dir, "envlens-standalone.html")
-with open(out_path, "w", encoding="utf-8") as f:
+standalone_path = os.path.join(base_dir, "envlens-standalone.html")
+with open(standalone_path, "w", encoding="utf-8") as f:
     f.write(html_bundled)
 
-print(f"Generated standalone single-file bundle at: {out_path} ({len(html_bundled)} bytes)")
+# Also update root index.html for zero-config static hosting
+index_path = os.path.join(base_dir, "index.html")
+shutil.copyfile(standalone_path, index_path)
+
+print(f"Bundled successfully:")
+print(f" - {standalone_path} ({len(html_bundled)} bytes)")
+print(f" - {index_path} ({len(html_bundled)} bytes)")

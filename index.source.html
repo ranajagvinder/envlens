@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EnvLens — Developer Config Sanitizer & Transmuter</title>
+  <meta name="description" content="100% offline, zero-leak client-side transformer and sanitizer for .env, JSON, YAML, Docker Compose, and Kubernetes Secrets.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo-group">
+      <div class="logo-badge">⚡ EL</div>
+      <div class="logo-title">
+        <h1>EnvLens</h1>
+        <div class="tagline">Zero-Leak Config Transmuter, Linter & Secret Sanitizer</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="privacy-pill">
+        <div class="pulse-dot"></div>
+        100% Offline & Client-Side Private
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Action / Presets Bar -->
+    <section class="action-bar">
+      <div class="preset-group">
+        <span class="preset-label">Templates:</span>
+        <button class="btn-chip" id="preset-nextjs">Next.js + DB</button>
+        <button class="btn-chip" id="preset-docker">Microservice Docker</button>
+        <button class="btn-chip" id="preset-k8s">Kubernetes App</button>
+        <button class="btn-chip" id="btn-clear">Clear</button>
+      </div>
+
+      <div class="toggle-group">
+        <label class="toggle-label" title="Replace credentials, JWTs, and database passwords with safe mock tokens">
+          <input type="checkbox" id="chk-sanitize" checked>
+          <span>🛡️ Auto-Sanitize Secrets</span>
+        </label>
+        <label class="toggle-label" title="Sort keys alphabetically for deterministic configs">
+          <input type="checkbox" id="chk-sort">
+          <span>Sort Keys (A-Z)</span>
+        </label>
+        <label class="toggle-label" title="Remove comments and empty rows">
+          <input type="checkbox" id="chk-minify">
+          <span>Strip Comments</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Editors Grid -->
+    <section class="editor-grid">
+      <!-- Input Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title-area">
+            <span class="panel-title">Source Config</span>
+            <div class="format-tabs" id="source-format-tabs">
+              <button class="tab-btn active" data-format="dotenv">.ENV</button>
+              <button class="tab-btn" data-format="json">JSON</button>
+              <button class="tab-btn" data-format="yaml">YAML</button>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="icon-btn" id="btn-paste" title="Paste from clipboard">📋 Paste</button>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <textarea 
+            id="input-editor" 
+            class="code-editor" 
+            placeholder="# Paste your raw .env or config here...&#10;DATABASE_URL=postgres://app_user:s3cr3t_p@ss@db.prod.internal:5432/app_db&#10;JWT_SECRET=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDcSemACt8x4iTMCda8Yhe3iZaWbvV5XKSTbuAn0M&#10;PORT=8080"
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="stats-bar">
+          <span id="input-stats">0 keys detected</span>
+          <span id="input-status" class="badge-success">Ready</span>
+        </div>
+      </div>
+
+      <!-- Output Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title-area">
+            <span class="panel-title">Transmuted Target</span>
+            <div class="format-tabs" id="target-format-tabs">
+              <button class="tab-btn active" data-target="json">JSON</button>
+              <button class="tab-btn" data-target="yaml">YAML</button>
+              <button class="tab-btn" data-target="docker">Docker Compose</button>
+              <button class="tab-btn" data-target="k8s-secret">K8s Secret</button>
+              <button class="tab-btn" data-target="dotenv">.ENV</button>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="icon-btn" id="btn-copy" title="Copy to clipboard">📄 Copy</button>
+            <button class="icon-btn" id="btn-download" title="Download as file">💾 Download</button>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <textarea 
+            id="output-editor" 
+            class="code-editor" 
+            readonly 
+            placeholder="Transmuted output will appear here automatically..."
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="stats-bar">
+          <span id="output-stats">0 lines generated</span>
+          <span id="output-security" class="badge-success">Shield Active</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schema Diff & Missing Variable Inspector -->
+    <section class="inspector-panel">
+      <div class="inspector-header">
+        <div class="inspector-title">
+          <span>🔍 Template Linter & Missing Key Inspector</span>
+        </div>
+        <button class="btn-chip" id="btn-toggle-template">Compare with .env.example</button>
+      </div>
+
+      <div id="template-section" style="display: none;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          Paste your <code>.env.example</code> or schema below to spot missing or undeclared keys in your current config.
+        </p>
+        <textarea 
+          id="template-editor" 
+          class="code-editor" 
+          style="min-height: 120px; height: 120px; margin-bottom: 1rem; border-radius: 6px; border: 1px solid var(--border-color);"
+          placeholder="# .env.example&#10;DATABASE_URL=&#10;REDIS_HOST=&#10;JWT_SECRET=&#10;STRIPE_API_KEY="
+        ></textarea>
+      </div>
+
+      <div class="diff-grid">
+        <div class="diff-box">
+          <h3>
+            <span>Missing Variables (Required)</span>
+            <span id="missing-count" style="color: #fb7185;">0</span>
+          </h3>
+          <ul class="diff-list" id="missing-list">
+            <li class="diff-item diff-synced">All required variables satisfied</li>
+          </ul>
+        </div>
+
+        <div class="diff-box">
+          <h3>
+            <span>Undeclared / Extra Variables</span>
+            <span id="orphaned-count" style="color: #fcd34d;">0</span>
+          </h3>
+          <ul class="diff-list" id="orphaned-list">
+            <li class="diff-item diff-synced">No undeclared variables</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>EnvLens — Pure vanilla JS, zero dependencies, zero telemetry, 100% offline ready.</p>
+  </footer>
+
+  <div id="toast" class="toast">Action completed!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
